@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="project_tender_view_list" model="ir.ui.view">
+        <field name="name">project_tender.view.tree</field>
+        <field name="model">project.tender</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="project_name" />
+                <field name="project_type" />
+                <field name="customer_id" />
+                <field name="responsible_user" />
+                <field name="start_date" />
+                <field name="status" widget="badge" decoration-success="status == 'contracted'" decoration-danger="status == 'canceled'" />
+            </list>
+        </field>
+    </record>
+
+    <record id="project_tender_view_form" model="ir.ui.view">
+        <field name="name">project.tender.view.form</field>
+        <field name="model">project.tender</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Confirm" name="confirm_action" type="object" class="btn-primary"/>
+                    <button string="Cancel" name="cancel_action" type="object" class="btn-secondary"/>
+                    <field name="status" widget="statusbar" options="{'clickable': 1}" />
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <label for="project_name"/>
+                        <h1>
+                            <field name="project_name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="customer_id" />
+                            <field name="create_date" />
+                            <field name="accept_date" />
+                        </group>      
+                        <group>
+                            <field name="project_type" />
+                            <field name="start_date" />
+                            <field name="responsible_user" />
+                            <field name="location" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <header>
+                                <button name="import_lines_action" 
+                                    string="Import" 
+                                    type="object" 
+                                    icon="fa-download"
+                                    class="btn-secondary import-button"/>
+                            </header>
+                            <field name="job_order_ids" >
+                                <list editable="bottom">
+                                    <control>
+                                        <create name="open_wizzz" string="Import" context="{'open_wizzz': True}" />    
+                                        
+                                    </control>
+                                    <field name="product" />
+                                    <field name="description" />
+                                    <field name="quantity" />
+                                    <field name="UOM_id" />
+                                    <!-- <field name="cost_sheet_id" /> -->
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_tender_view_search" model="ir.ui.view">
+        <field name="name">project_tender.view.search</field>
+        <field name="model">project.tender</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_name" />
+
+                
+                <filter name="group_project_type" string="Project Type" context="{'group_by' : 'project_type'}"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="project_tender_action" model="ir.actions.act_window">
+        <field name="name">project tender</field>
+        <field name="res_model">project.tender</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="domain">[]</field> -->
+    </record>
+    
+    <menuitem
+        id="project_tender_menu"
+        name="Project Tender"
+        parent="projects_base_menu"
+        action="project_tender_action"
+        sequence="1"/>
+</odoo>

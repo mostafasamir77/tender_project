@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record id="cost_sheet_sequence" model="ir.sequence">
+            <field name="name">cost sheet seq.</field>
+            <field name="code">cost_sheet_seq</field>
+            <field name="prefix">COST-SHEET/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

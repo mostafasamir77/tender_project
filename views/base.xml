@@ -1,0 +1,14 @@
+<odoo>
+    <menuitem
+        id="tender_base_menu"
+        name="Tender"
+        sequence="1"
+        web_icon="tender,static/description/icon.png"
+        />    
+        
+    <menuitem
+        id="projects_base_menu"
+        name="Projects Menu"
+        parent="tender_base_menu"
+        sequence="2"/>
+</odoo>
