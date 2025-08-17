@@ -8,6 +8,9 @@ class ProjectTender(models.Model):
 
     job_order_ids = fields.One2many('job.order', 'project_tender_id' )
 
+    project_id = fields.Many2one('project.project')
+    analytic_account_id = fields.Many2one('account.analytic.account')
+
     status = fields.Selection([
         ('draft','Draft'),
         ('tendering','Tendering'),
@@ -41,22 +44,62 @@ class ProjectTender(models.Model):
                 if existing:
                     raise ValidationError('Project Name must be unique!')
 
-    def import_lines_action(self):
-        """ open the wizard that import the excel file """
-        
-        action = self.env['ir.actions.actions']._for_xml_id('tender.import_button_wizard_action')
-        action['context'] = {'default_project_tender_id' : self.id}
-        return action
-    
+
+    def create_project(self):
+        """ create the project and link it to the smart button """
+
+        created_project_id = self.env['project.project'].create({
+            'name' : self.project_name ,
+            'partner_id' : self.customer_id.id ,
+            'date_start' : self.start_date ,
+            'account_id' : self.analytic_account_id.id ,
+        })
+
+        for rec in self:
+            rec.project_id = created_project_id.id
+
+    def create_analytic_account(self):
+        created_analytic_account = self.env['account.analytic.account'].create({
+            'name' : f"{self.project_name} Analytic" ,
+            'partner_id' : self.customer_id.id ,
+            'plan_id' : self.env['account.analytic.plan'].search([
+                    ('name','=','Project') 
+                ],limit=1 ).id ,
+        })
+
+        for rec in self:
+            rec.analytic_account_id = created_analytic_account
+
 
     def confirm_action(self):
-        pass     
-    
-    
+        for rec in self:
+            # change the statue to tendering
+            rec.status = 'tendering'
+            # assign value to accept date field
+            rec.accept_date = fields.Date.today()
+            # creating the analytic account
+            self.create_analytic_account()
+            # creating the project 
+            self.create_project()
+
+            
     def cancel_action(self):
         for rec in self:
             rec.status = 'canceled'
 
+
+
+    def action_open_project(self):
+        self.ensure_one()
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'project',
+            'res_model': 'project.project',
+            'res_id': self.project_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
 
 class JobOrder(models.Model):
     _name = 'job.order'
@@ -69,37 +112,9 @@ class JobOrder(models.Model):
     UOM_id = fields.Many2one('uom.uom')
     # cost_sheet = fields.Many2one('cost.sheet')
 
-    # @api.model
-    # def create(self, vals):
-    #     import logging
-    #     _logger = logging.getLogger(__name__)
-        
-    #     # Check if this is from the import button
-    #     if self.env.context.get('open_wizzz'):
-    #         _logger.info("Import action triggered!")
-            
-    #         # Call your import logic here
-    #         # self.open_wizzz()
-            
-    #         # You can either:
-    #         # 1. Return a wizard/action instead of creating a record
-    #         return {
-    #             'type': 'ir.actions.act_window',
-    #             'name': 'Import Lines',
-    #             'res_model': 'import.job.order.wizard',  # Your import wizard
-    #             'view_mode': 'form',
-    #             'target': 'new',
-    #         }
-            
-    #         # OR 2. Create a record with default values after import
-    #         # return super().create(vals)
-        
-    #     return super().create(vals)
+    def import_action(self):
+        """ open wizard to import the lines """
 
-    # def open_wizzz(self):
-    #     import logging
-    #     _logger = logging.getLogger(__name__)   
-    #     _logger.info("ana tayh - Import method called")
-        
-    #     # Your import logic here
-    #     pass
+        action = self.env['ir.actions.actions']._for_xml_id('tender.import_button_wizard_action')
+        action['context'] = {'default_project_tender_id' : self.project_tender_id.id}
+        return action

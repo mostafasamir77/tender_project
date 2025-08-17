@@ -28,6 +28,10 @@
                 </header>
 
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_project" string="Project" type="object" class="oe_stat_button" icon="fa-dropbox"/>
+                    </div>
+                    
                     <div class="oe_title">
                         <label for="project_name"/>
                         <h1>
@@ -50,18 +54,12 @@
                     </group>
                     <notebook>
                         <page string="Lines">
-                            <header>
-                                <button name="import_lines_action" 
-                                    string="Import" 
-                                    type="object" 
-                                    icon="fa-download"
-                                    class="btn-secondary import-button"/>
-                            </header>
                             <field name="job_order_ids" >
                                 <list editable="bottom">
                                     <control>
-                                        <create name="open_wizzz" string="Import" context="{'open_wizzz': True}" />    
-                                        
+                                        <create string="Add a line"/>
+                                        <button string="Import" name="import_action" type="object" class="import-button"/>
+                                        <!-- <create string="Add a Line" context="{'default_product': 'mostafa'}"/> -->
                                     </control>
                                     <field name="product" />
                                     <field name="description" />
