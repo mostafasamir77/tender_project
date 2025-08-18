@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <record id="cost_sheet_view_tree" model="ir.ui.view">
+        <field name="name">cost.sheet.view.tree</field>
+        <field name="model">cost.sheet</field>
+        <field name="arch" type="xml">
+            <list string="">
+                
+            </list>
+        </field>
+    </record> -->
+
+    <record id="cost_sheet_view_form" model="ir.ui.view">
+        <field name="name">cost.sheet.view.form</field>
+        <field name="model">cost.sheet</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="analytic_account_id" readonly="1"/>
+                            <field name="job_order_id" readonly="1"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="expected_start_date" />
+                            <field name="expected_end_date"/>
+                            <field name="BOQ_expected_duration_per_days"/>
+                            <field name="output_product" readonly="1"/>
+                            <field name="quantity" readonly="1"/>
+                            <field name="UOM_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="close_date"/>
+                            <field name="create_uid" readonly="1"/>
+                            <field name="description" readonly="1"/>
+                            <div class="o_row">
+                                <label for='additional_expenses_type'/>
+                                <field name="additional_expenses_type" class="oe_inline"/>
+                                <field name="additional_expenses_value" class="oe_inline"/>
+                            </div>
+                            <field name="risk"/>
+                            <field name="margin"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Material">
+                            
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="cost_sheet_action" model="ir.actions.act_window">
+        <field name="name">cost sheet action</field>
+        <field name="res_model">cost.sheet</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="domain">[]</field> -->
+    </record>
+
+    <menuitem
+        id="cost_sheet_menu"
+        name="Cost Sheet"
+        sequence="3"
+        parent="tender_base_menu"
+        action="cost_sheet_action"/>
+
+</odoo>
