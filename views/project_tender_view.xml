@@ -29,7 +29,12 @@
 
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_open_project" string="Project" type="object" class="oe_stat_button" icon="fa-dropbox"/>
+                        <button name="action_open_project" 
+                                string="Project" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-pencil"
+                                invisible="not project_id"/>
                     </div>
                     
                     <div class="oe_title">

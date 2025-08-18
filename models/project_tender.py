@@ -17,7 +17,7 @@ class ProjectTender(models.Model):
         ('contracted','Contracted'),
         ('done','Done'),
         ('canceled','Canceled'),
-    ])
+    ], default='draft')
 
     project_name = fields.Char(required=True)
     customer_id = fields.Many2one('res.partner')
