@@ -42,7 +42,7 @@
                             <field name="create_uid" readonly="1"/>
                             <field name="description" readonly="1"/>
                             <div class="o_row">
-                                <label for='additional_expenses_type'/>
+                                <label for='additional_expenses_type' class="label-additional-expenses"/>
                                 <field name="additional_expenses_type" class="oe_inline"/>
                                 <field name="additional_expenses_value" class="oe_inline"/>
                             </div>
@@ -63,6 +63,18 @@
                                     <field name="quantity_after_wastage" />
                                     <field name="cost_per_uom" />
                                     <field name="cost_price_sub_total" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Equipment">
+                            <field name="equipment_ids">
+                                <list editable="bottom">
+                                    <field name="job_type" />
+                                    <field name="equipment_id" />
+                                    <field name="no_of_required_equipment" />
+                                    <field name="total_working_hours" />
+                                    <field name="cost_per_hour" />
+                                    <field name="sub_total" />
                                 </list>
                             </field>
                         </page>

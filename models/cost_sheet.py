@@ -5,6 +5,7 @@ class CostSheet(models.Model):
     _rec_name =  'ref'
 
     material_ids = fields.One2many('material.material', 'cost_sheet_id')
+    equipment_ids = fields.One2many('equipment.equipment', 'cost_sheet_id')
 
     ref = fields.Char(readonly=True, default='New')
     name = fields.Char()
@@ -83,9 +84,28 @@ class Material(models.Model):
 
 
 
+class Equipment(models.Model):
+    _name = 'equipment.equipment'
 
+    cost_sheet_id = fields.Many2one('cost.sheet')
 
+    job_type = fields.Selection([
+        ('material','Material'),
+        ('equipment','Equipment'),
+        ('labor','Labor'),
+        ('over_head','Over Head'),
+    ], default='equipment' , required=True , readonly=True)
 
+    equipment_id = fields.Many2one('maintenance.equipment')
+    no_of_required_equipment = fields.Float()
+    total_working_hours = fields.Float()
+    cost_per_hour = fields.Float()
+    sub_total = fields.Float(compute='_compute_sub_total')
+
+    @api.depends('total_working_hours', 'cost_per_hour')
+    def _compute_sub_total(self):
+        for rec in self:
+            rec.sub_total = rec.total_working_hours * rec.cost_per_hour
 
 
 

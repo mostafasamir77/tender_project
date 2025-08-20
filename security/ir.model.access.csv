@@ -4,6 +4,7 @@ access_job_order,access_job_order,model_job_order,,1,1,1,1
 access_import_job_order_wizard,access_import_job_order_wizard,model_import_job_order_wizard,,1,1,1,1
 access_cost_sheet,access_cost_sheet,model_cost_sheet,,1,1,1,1
 access_material_material,access_material_material,model_material_material,,1,1,1,1
+access_equipment_equipment,access_equipment_equipment,model_equipment_equipment,,1,1,1,1
 
 
 
