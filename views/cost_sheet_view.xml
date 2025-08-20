@@ -52,7 +52,19 @@
                     </group>
                     <notebook>
                         <page string="Material">
-                            
+                            <field name="material_ids">
+                                <list editable="bottom">
+                                    <field name="job_type" />
+                                    <field name="product_id" />
+                                    <field name="description" />
+                                    <field name="factor" />
+                                    <field name="planned_quantity" />
+                                    <field name="wastage" />
+                                    <field name="quantity_after_wastage" />
+                                    <field name="cost_per_uom" />
+                                    <field name="cost_price_sub_total" />
+                                </list>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>

@@ -17,19 +17,19 @@ class ProjectTender(models.Model):
         ('contracted','Contracted'),
         ('done','Done'),
         ('canceled','Canceled'),
-    ], default='draft')
+    ], default='draft', tracking=True)
 
-    project_name = fields.Char(required=True)
-    customer_id = fields.Many2one('res.partner')
+    project_name = fields.Char(required=True, tracking=True)
+    customer_id = fields.Many2one('res.partner', tracking=True, required=True)
     create_date = fields.Date(readonly=True)
-    accept_date = fields.Date(readonly=True)
+    accept_date = fields.Date(readonly=True, tracking=True)
     project_type = fields.Selection([
         ('direct_project','Direct Project'),
         ('tender','Tender'),
-    ],default='tender' ,required=True)
-    start_date = fields.Date()
-    responsible_user = fields.Many2one('res.users')
-    location = fields.Char()
+    ],default='tender' ,required=True ,tracking=True)
+    start_date = fields.Date(tracking=True, required=True)
+    responsible_user = fields.Many2one('res.users',tracking=True,required=True)
+    location = fields.Char(tracking=True)
 
 
 
@@ -69,6 +69,21 @@ class ProjectTender(models.Model):
 
         for rec in self:
             rec.analytic_account_id = created_analytic_account
+
+
+    def create_cost_sheet(self):
+        for line in self.job_order_ids:
+            self.env['cost.sheet'].create({
+                'name' : line.product ,
+                'project_id' : self.project_id.id ,
+                'analytic_account_id' : self.analytic_account_id.id ,
+                'job_order_id' : line.id ,
+                'customer_id': self.customer_id.id ,
+                'output_product': line.product ,
+                'quantity' : line.quantity ,
+                'UOM_id' : line.UOM_id ,
+                'description' : line.description ,
+            })
 
 
     def confirm_action(self):
