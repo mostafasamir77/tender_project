@@ -54,7 +54,6 @@
                         <page string="Material">
                             <field name="material_ids">
                                 <list editable="bottom">
-                                    <field name="job_type" />
                                     <field name="product_id" />
                                     <field name="description" />
                                     <field name="factor" />
@@ -69,7 +68,6 @@
                         <page string="Equipment">
                             <field name="equipment_ids">
                                 <list editable="bottom">
-                                    <field name="job_type" />
                                     <field name="equipment_id" />
                                     <field name="no_of_required_equipment" />
                                     <field name="total_working_hours" />
@@ -81,12 +79,23 @@
                         <page string="Labor">
                             <field name="labor_ids">
                                 <list editable="bottom">
-                                    <field name="job_type" />
                                     <field name="job_position_id" />
                                     <field name="description" />
                                     <field name="no_of_manpower" />
                                     <field name="total_working_hours" />
                                     <field name="cost_per_hour" />
+                                    <field name="sub_total" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Over Head">
+                            <field name="over_head_ids">
+                                <list editable="bottom">
+                                    <field name="product_id" />
+                                    <field name="description" />
+                                    <field name="planned_quantity" />
+                                    <field name="UOM_id" />
+                                    <field name="cost_per_unit" />
                                     <field name="sub_total" />
                                 </list>
                             </field>

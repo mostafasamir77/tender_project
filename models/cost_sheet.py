@@ -7,6 +7,7 @@ class CostSheet(models.Model):
     material_ids = fields.One2many('material.material', 'cost_sheet_id')
     equipment_ids = fields.One2many('equipment.equipment', 'cost_sheet_id')
     labor_ids = fields.One2many('labor.labor', 'cost_sheet_id', string='labor')
+    over_head_ids = fields.One2many('over.head', 'cost_sheet_id')
 
     ref = fields.Char(readonly=True, default='New')
     name = fields.Char()
@@ -52,12 +53,6 @@ class Material(models.Model):
     _name = 'material.material'
     cost_sheet_id = fields.Many2one('cost.sheet')
 
-    job_type = fields.Selection([
-        ('material','Material'),
-        ('equipment','Equipment'),
-        ('labor','Labor'),
-        ('over_head','Over Head'),
-    ], default='material' , required=True , readonly=True)
     product_id = fields.Many2one('product.template')
     description = fields.Char()
     factor = fields.Float()
@@ -90,13 +85,6 @@ class Equipment(models.Model):
 
     cost_sheet_id = fields.Many2one('cost.sheet')
 
-    job_type = fields.Selection([
-        ('material','Material'),
-        ('equipment','Equipment'),
-        ('labor','Labor'),
-        ('over_head','Over Head'),
-    ], default='equipment' , required=True , readonly=True)
-
     equipment_id = fields.Many2one('maintenance.equipment')
     no_of_required_equipment = fields.Float()
     total_working_hours = fields.Float()
@@ -113,12 +101,6 @@ class Labor(models.Model):
 
     cost_sheet_id = fields.Many2one('cost.sheet')
 
-    job_type = fields.Selection([
-        ('material','Material'),
-        ('equipment','Equipment'),
-        ('labor','Labor'),
-        ('over_head','Over Head'),
-    ], default='labor' , required=True , readonly=True)
     job_position_id = fields.Many2one('hr.job')
     description = fields.Char()
     no_of_manpower = fields.Integer()
@@ -126,11 +108,26 @@ class Labor(models.Model):
     cost_per_hour = fields.Float()
     sub_total = fields.Float(compute='_compute_sub_total')
 
+    @api.depends('no_of_manpower', 'total_working_hours', 'cost_per_hour')
     def _compute_sub_total(self):
         for rec in self :
             rec.sub_total = rec.no_of_manpower * rec.total_working_hours * rec.cost_per_hour 
 
 
+class OverHead(models.Model):
+    _name = 'over.head'
 
+    cost_sheet_id = fields.Many2one('cost.sheet')
 
+    product_id = fields.Many2one('product.template')
+    description = fields.Char()
+    planned_quantity = fields.Float()
+    UOM_id = fields.Many2one('uom.uom')
+    cost_per_unit = fields.Float()
+    sub_total = fields.Float(compute='_compute_sub_total')
+
+    @api.depends('planned_quantity', 'cost_per_unit')
+    def _compute_sub_total(self):
+        for rec in self:
+            rec.sub_total = rec.planned_quantity * rec.cost_per_unit
 
