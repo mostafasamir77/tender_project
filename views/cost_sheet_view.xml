@@ -101,6 +101,26 @@
                             </field>
                         </page>
                     </notebook>
+                        <group>
+                            <group string="Costing">
+                                <field name="total_material_cost" />
+                                <field name="total_equipment_cost" />
+                                <field name="total_labor_cost" />
+                                <field name="total_overhead_cost" />
+                                <field name="total_cost" />
+                                <field name="additional_expense" />
+                                <field name="total_cost_and_expense" />
+                                <field name="costing_risk" />
+                                <field name="cost_per_unit" />
+                                <field name="total_costing" />
+                            </group>
+                            <group string="Pricing">
+                                <!-- <field name="total_costing" /> -->
+                                <field name="pricing_margin" />
+                                <field name="price_per_unit" />
+                                <field name="total_price" />
+                            </group>
+                        </group>
                 </sheet>
             </form>
         </field>

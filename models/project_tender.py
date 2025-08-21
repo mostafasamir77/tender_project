@@ -72,8 +72,12 @@ class ProjectTender(models.Model):
 
 
     def create_cost_sheet(self):
+        """ Creates a cost sheet for each job order line and assigns the ID 
+        of the created cost sheet to the corresponding Many2one field 
+        in the job order """
+
         for line in self.job_order_ids:
-            self.env['cost.sheet'].create({
+            cost_sheet = self.env['cost.sheet'].create({
                 'name' : line.product ,
                 'project_id' : self.project_id.id ,
                 'analytic_account_id' : self.analytic_account_id.id ,
@@ -81,9 +85,11 @@ class ProjectTender(models.Model):
                 'customer_id': self.customer_id.id ,
                 'output_product': line.product ,
                 'quantity' : line.quantity ,
-                'UOM_id' : line.UOM_id ,
+                'UOM_id' : line.UOM_id.id ,
                 'description' : line.description ,
             })
+            # assign the cost sheet to the field that in the job order model 
+            line.cost_sheet_id = cost_sheet.id
 
 
     def confirm_action(self):
@@ -96,6 +102,8 @@ class ProjectTender(models.Model):
             self.create_analytic_account()
             # creating the project 
             self.create_project()
+            # create cost sheet to each job order
+            self.create_cost_sheet()
 
             
     def cancel_action(self):
@@ -125,7 +133,7 @@ class JobOrder(models.Model):
     description = fields.Char()
     quantity = fields.Float()
     UOM_id = fields.Many2one('uom.uom')
-    # cost_sheet = fields.Many2one('cost.sheet')
+    cost_sheet_id = fields.Many2one('cost.sheet', readonly=True)
 
     def import_action(self):
         """ open wizard to import the lines """

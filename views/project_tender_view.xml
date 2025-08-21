@@ -70,7 +70,7 @@
                                     <field name="description" />
                                     <field name="quantity" />
                                     <field name="UOM_id" />
-                                    <!-- <field name="cost_sheet_id" /> -->
+                                    <field name="cost_sheet_id" />
                                 </list>
                             </field>
                         </page>
