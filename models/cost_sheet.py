@@ -18,7 +18,7 @@ class CostSheet(models.Model):
     customer_id = fields.Many2one('res.partner')
     expected_start_date = fields.Date()
     expected_end_date = fields.Date()
-    BOQ_expected_duration_per_days = fields.Date(compute='_compute_BOQ_expected_duration_per_days')
+    BOQ_expected_duration_per_days = fields.Integer(compute='_compute_BOQ_expected_duration_per_days')
     output_product = fields.Char()
     quantity = fields.Float(default=1)
     UOM_id = fields.Many2one('uom.uom')
@@ -150,7 +150,10 @@ class CostSheet(models.Model):
     @api.depends('expected_end_date')
     def _compute_BOQ_expected_duration_per_days(self):
         for rec in self:
-            rec.BOQ_expected_duration_per_days = rec.expected_start_date - rec.expected_end_date
+            if rec.expected_start_date and rec.expected_end_date:
+                rec.BOQ_expected_duration_per_days = (rec.expected_end_date - rec.expected_start_date).days
+            else:
+                rec.BOQ_expected_duration_per_days = 0
 
 
 
