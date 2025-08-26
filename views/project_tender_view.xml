@@ -61,11 +61,6 @@
                         <page string="Lines">
                             <field name="job_order_ids" >
                                 <list editable="bottom">
-                                    <control>
-                                        <create string="Add a line"/>
-                                        <button string="Import" name="import_action" type="object" class="import-button"/>
-                                        <!-- <create string="Add a Line" context="{'default_product': 'mostafa'}"/> -->
-                                    </control>
                                     <field name="product" />
                                     <field name="description" />
                                     <field name="quantity" />
@@ -106,6 +101,15 @@
         <!-- <field name="domain">[]</field> -->
     </record>
     
+    <record id="project_tender_action_server" model="ir.actions.server">
+        <field name="name">Import Job Order Lines</field>
+        <field name="model_id" ref="model_project_tender"/>
+        <field name="binding_model_id" ref="model_project_tender"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.import_action()
+        </field>
+    </record>
     <menuitem
         id="project_tender_menu"
         name="Project Tender"

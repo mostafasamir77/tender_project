@@ -2,7 +2,7 @@ from odoo import api, fields, models
 import pandas as pd
 import io
 import base64
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 class ImportJobOrderWizard(models.TransientModel):
     _name = 'import.job.order.wizard'
@@ -32,6 +32,7 @@ class ImportJobOrderWizard(models.TransientModel):
         for index, row in  df.iterrows() :
             try:
                 self.env['job.order'].create({
+                    'project_tender_id': self.project_tender_id.id,
                     'product': row['product'],
                     'description': row['description'],
                     'quantity': int(row['quantity']),

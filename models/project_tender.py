@@ -71,6 +71,14 @@ class ProjectTender(models.Model):
             rec.analytic_account_id = created_analytic_account
 
 
+    def import_action(self):
+        """ open wizard to import the lines """
+
+        action = self.env['ir.actions.actions']._for_xml_id('tender.import_button_wizard_action')
+        action['context'] = {'default_project_tender_id' : self.id}
+        return action
+
+
     def create_cost_sheet(self):
         """ Creates a cost sheet for each job order line and assigns the ID 
         of the created cost sheet to the corresponding Many2one field 
@@ -135,9 +143,3 @@ class JobOrder(models.Model):
     UOM_id = fields.Many2one('uom.uom')
     cost_sheet_id = fields.Many2one('cost.sheet', readonly=True)
 
-    def import_action(self):
-        """ open wizard to import the lines """
-
-        action = self.env['ir.actions.actions']._for_xml_id('tender.import_button_wizard_action')
-        action['context'] = {'default_project_tender_id' : self.project_tender_id.id}
-        return action
